@@ -4,15 +4,16 @@ description: Fix and run Ignition Gazebo 6 (ign-gazebo / gz sim) on native Windo
 agent_created: true
 ---
 
-# Ignition Gazebo 6 on Windows (conda/RoboStack) — Startup Fix
+# ROS 2 + Gazebo on Native Windows (conda/RoboStack) — Setup & Fix Guide
 
 ## Background
 
-Conda-packaged Ignition Gazebo 6 (RoboStack `ros-humble-ros-gz*` builds) is broken out of the box on Windows. Nothing sets the ignition environment variables, conda drops symlinks and mangles DLL names, and the build hard-codes Linux conventions. The result is a stack of ~11 independent failures, each surfacing only after the previous one is fixed. The errors peel like an onion: fix one, run again, hit the next.
+RoboStack conda packages are the practical way to run ROS 2 Humble + Ignition Gazebo 6 on **native Windows** (no WSL/VM). However, the Gazebo 6 packages are broken out of the box: nothing sets the ignition environment variables, conda drops symlinks and mangles DLL names, and the build hard-codes Linux conventions. The result is a stack of ~11 independent failures, each surfacing only after the previous one is fixed. The errors peel like an onion: fix one, run again, hit the next. This skill provides the complete setup workflow plus an idempotent patch script that clears the whole stack.
 
 ## Prerequisites
 
-- conda env with `ros-humble-ros-gz*` packages (e.g. env named `ros_gz` at `E:\Anaconda\envs\ros_gz` — adapt paths below)
+- conda (miniconda/mambaforge) on 64-bit Windows; create the environment with:
+  `conda create -n ros_gz -c robostack-humble -c conda-forge ros-humble-ros-base ros-humble-ros-gz`
 - The `ign` launcher is a Ruby script: `<env>\Library\bin\ign` (called by `<env>\Library\bin\ign.bat`), which loads `<env>\Library\lib\ruby\ignition\cmdgazebo6.rb`
 - Visual Studio BuildTools `dumpbin.exe` for dependency forensics (optional but invaluable)
 
